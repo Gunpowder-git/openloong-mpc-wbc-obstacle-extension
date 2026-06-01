@@ -1,0 +1,32 @@
+NOTICE
+
+This repository contains course-project modifications based on the open-source OpenLoong-Dyn-Control project.
+
+Original project:
+
+Name: OpenLoong-Dyn-Control / OpenLoong Dynamics Control
+Repository: https://github.com/loongOpen/OpenLoong-Dyn-Control
+License: Apache License 2.0
+Original authors / operators: Humanoid Robotics (Shanghai) Co., Ltd., Shanghai Humanoid Robotics Manufacturing Innovation Center, and OpenAtom Foundation, as stated by the upstream project.
+
+This repository is not an official OpenLoong repository.
+
+Modifications in This Repository
+
+Course-project modifications include, but are not limited to:
+
+Enhanced automatic obstacle avoidance demo
+Virtual LiDAR scanning using MuJoCo ray casting
+Low-obstacle step-over logic
+High-obstacle bypass logic
+Arc-length style waypoint tracking
+Manual multi-function control mode
+Additional MuJoCo simulation scenes
+Foot-ground contact parameter adjustments
+Fall detection and simulation reset logic
+Additional demo and testing files
+Attribution
+
+Original OpenLoong-Dyn-Control source code, robot model files, documentation, and project structure belong to their respective original authors and contributors.
+
+New or modified files in this repository were prepared for educational and research demonstration purposes by Derek Zhang and course project contributors, 2026.
