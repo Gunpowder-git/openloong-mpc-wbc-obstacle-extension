@@ -1,0 +1,102 @@
+<mujoco model="scene_complete_environment">
+  <include file="AzureLoong.xml"/>
+
+  <compiler angle="radian" meshdir="." texturedir="asset"/>
+
+  <option timestep="0.001" iterations="50" solver="Newton" tolerance="1e-10"/>
+
+  <visual>
+    <headlight diffuse="0.8 0.8 0.8" ambient="0.5 0.5 0.5" specular="0.2 0.2 0.2"/>
+    <rgba haze="0.1 0.15 0.2 1"/>
+    <global azimuth="120" elevation="-12"/>
+    <quality shadowsize="4096"/>
+    <map znear="0.01" zfar="100"/>
+  </visual>
+
+  <asset>
+    <!-- Sky -->
+    <texture name="skybox" type="skybox" builtin="gradient" rgb1=".5 .7 .9" rgb2=".2 .3 .5" width="512" height="3072"/>
+
+    <!-- Ground textures -->
+    <texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.35 0.4 0.45" rgb2="0.3 0.35 0.4" markrgb="0.8 0.8 0.8" width="400" height="400"/>
+    <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="10 10" reflectance="0.15"/>
+
+    <!-- Concrete texture -->
+    <texture name="concrete" type="2d" builtin="checker" rgb1="0.55 0.55 0.55" rgb2="0.5 0.5 0.5" width="200" height="200"/>
+    <material name="concrete" texture="concrete" texuniform="true" texrepeat="4 4" reflectance="0.08"/>
+
+    <!-- Wood texture -->
+    <texture name="wood" type="2d" builtin="flat" rgb1="0.65 0.45 0.25" width="100" height="100"/>
+    <material name="wood" texture="wood" reflectance="0.12"/>
+
+    <!-- Tile texture -->
+    <texture name="tile" type="2d" builtin="checker" rgb1="0.75 0.75 0.8" rgb2="0.7 0.7 0.75" width="150" height="150"/>
+    <material name="tile" texture="tile" texuniform="true" texrepeat="6 6" reflectance="0.25"/>
+
+    <!-- Grass texture -->
+    <texture name="grass" type="2d" builtin="flat" rgb1="0.3 0.5 0.2" width="100" height="100"/>
+    <material name="grass" texture="grass" reflectance="0.05"/>
+  </asset>
+
+  <worldbody>
+    <!-- Multiple light sources for better illumination -->
+    <light pos="8 8 12" dir="-0.5 -0.5 -1" directional="true" diffuse="0.9 0.9 0.9" specular="0.4 0.4 0.4" castshadow="true"/>
+    <light pos="-5 8 10" dir="0.5 -0.5 -1" directional="false" diffuse="0.5 0.5 0.5" specular="0.2 0.2 0.2"/>
+    <light pos="15 -5 8" dir="-0.5 0.5 -1" directional="false" diffuse="0.4 0.4 0.4" specular="0.1 0.1 0.1"/>
+
+    <!-- Main ground plane with original friction -->
+    <geom name="floor" size="0 0 0.05" type="plane" material="groundplane" condim="3" friction="1.2 0.2 0.2"/>
+
+    <!-- Starting platform (2m x 2m) -->
+    <geom name="start_platform" type="box" size="1.0 1.0 0.03" pos="0.0 0.0 0.03" material="tile" condim="3" friction="1.2 0.2 0.2"/>
+
+    <!-- Path to stairs (4m long) -->
+    <geom name="path_to_stairs" type="box" size="1.5 0.8 0.02" pos="2.0 0.0 0.02" material="concrete" condim="3" friction="1.2 0.2 0.2"/>
+
+    <!-- Continuous staircase UP (8 steps, each 17.5cm high) -->
+    <geom name="stair_up_01" type="box" size="0.30 1.0 0.0175" pos="4.0 0.0 0.0175" material="concrete" condim="3" friction="1.2 0.2 0.2"/>
+    <geom name="stair_up_02" type="box" size="0.30 1.0 0.0350" pos="4.6 0.0 0.0350" material="concrete" condim="3" friction="1.2 0.2 0.2"/>
+    <geom name="stair_up_03" type="box" size="0.30 1.0 0.0525" pos="5.2 0.0 0.0525" material="concrete" condim="3" friction="1.2 0.2 0.2"/>
+    <geom name="stair_up_04" type="box" size="0.30 1.0 0.0700" pos="5.8 0.0 0.0700" material="concrete" condim="3" friction="1.2 0.2 0.2"/>
+    <geom name="stair_up_05" type="box" size="0.30 1.0 0.0875" pos="6.4 0.0 0.0875" material="concrete" condim="3" friction="1.2 0.2 0.2"/>
+    <geom name="stair_up_06" type="box" size="0.30 1.0 0.1050" pos="7.0 0.0 0.1050" material="concrete" condim="3" friction="1.2 0.2 0.2"/>
+    <geom name="stair_up_07" type="box" size="0.30 1.0 0.1225" pos="7.6 0.0 0.1225" material="concrete" condim="3" friction="1.2 0.2 0.2"/>
+    <geom name="stair_up_08" type="box" size="0.30 1.0 0.1400" pos="8.2 0.0 0.1400" material="concrete" condim="3" friction="1.2 0.2 0.2"/>
+
+    <!-- Upper platform (3m x 2m) -->
+    <geom name="upper_platform" type="box" size="1.5 1.0 0.1400" pos="10.2 0.0 0.1400" material="tile" condim="3" friction="1.2 0.2 0.2"/>
+
+    <!-- Continuous staircase DOWN (8 steps) -->
+    <geom name="stair_down_01" type="box" size="0.30 1.0 0.1400" pos="12.2 0.0 0.1400" material="concrete" condim="3" friction="1.2 0.2 0.2"/>
+    <geom name="stair_down_02" type="box" size="0.30 1.0 0.1225" pos="12.8 0.0 0.1225" material="concrete" condim="3" friction="1.2 0.2 0.2"/>
+    <geom name="stair_down_03" type="box" size="0.30 1.0 0.1050" pos="13.4 0.0 0.1050" material="concrete" condim="3" friction="1.2 0.2 0.2"/>
+    <geom name="stair_down_04" type="box" size="0.30 1.0 0.0875" pos="14.0 0.0 0.0875" material="concrete" condim="3" friction="1.2 0.2 0.2"/>
+    <geom name="stair_down_05" type="box" size="0.30 1.0 0.0700" pos="14.6 0.0 0.0700" material="concrete" condim="3" friction="1.2 0.2 0.2"/>
+    <geom name="stair_down_06" type="box" size="0.30 1.0 0.0525" pos="15.2 0.0 0.0525" material="concrete" condim="3" friction="1.2 0.2 0.2"/>
+    <geom name="stair_down_07" type="box" size="0.30 1.0 0.0350" pos="15.8 0.0 0.0350" material="concrete" condim="3" friction="1.2 0.2 0.2"/>
+    <geom name="stair_down_08" type="box" size="0.30 1.0 0.0175" pos="16.4 0.0 0.0175" material="concrete" condim="3" friction="1.2 0.2 0.2"/>
+
+    <!-- End platform (2m x 2m) -->
+    <geom name="end_platform" type="box" size="1.0 1.0 0.03" pos="18.0 0.0 0.03" material="tile" condim="3" friction="1.2 0.2 0.2"/>
+
+    <!-- Side ramps for variety -->
+    <geom name="ramp_up_gentle" type="box" size="2.5 0.9 0.04" pos="6.0 2.8 0.15" euler="0 0.12 0" material="wood" condim="3" friction="1.3 0.2 0.2"/>
+    <geom name="ramp_platform" type="box" size="1.0 0.9 0.04" pos="9.0 2.8 0.30" material="wood" condim="3" friction="1.3 0.2 0.2"/>
+    <geom name="ramp_down_gentle" type="box" size="2.5 0.9 0.04" pos="12.0 2.8 0.15" euler="0 -0.12 0" material="wood" condim="3" friction="1.3 0.2 0.2"/>
+
+    <!-- Grass areas on sides -->
+    <geom name="grass_left" type="box" size="20.0 2.0 0.01" pos="9.0 -4.0 0.01" material="grass" condim="3" friction="0.8 0.1 0.1"/>
+    <geom name="grass_right" type="box" size="20.0 2.0 0.01" pos="9.0 5.0 0.01" material="grass" condim="3" friction="0.8 0.1 0.1"/>
+
+    <!-- Low obstacles for testing -->
+    <geom name="obstacle_low_1" type="box" size="0.5 0.4 0.05" pos="2.5 -0.6 0.05" material="wood" condim="3" friction="1.2 0.2 0.2"/>
+    <geom name="obstacle_low_2" type="box" size="0.4 0.3 0.08" pos="10.5 -0.5 0.22" material="wood" condim="3" friction="1.2 0.2 0.2"/>
+
+    <!-- Medium obstacles -->
+    <geom name="obstacle_med_1" type="box" size="0.35 0.35 0.12" pos="17.0 0.7 0.15" material="wood" condim="3" friction="1.2 0.2 0.2"/>
+
+    <!-- Boundary walls (semi-transparent) -->
+    <geom name="wall_back" type="box" size="20.0 0.1 0.8" pos="9.0 -6.5 0.8" rgba="0.5 0.5 0.6 0.2"/>
+    <geom name="wall_front" type="box" size="20.0 0.1 0.8" pos="9.0 7.5 0.8" rgba="0.5 0.5 0.6 0.2"/>
+  </worldbody>
+</mujoco>

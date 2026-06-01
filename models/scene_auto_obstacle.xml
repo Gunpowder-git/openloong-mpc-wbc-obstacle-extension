@@ -1,0 +1,43 @@
+<mujoco model="scene_auto_obstacle">
+  <include file="AzureLoong.xml"/>
+
+  <visual>
+    <headlight diffuse="0.55 0.55 0.55" ambient="0.35 0.35 0.35" specular="0.1 0.1 0.1"/>
+    <rgba haze="0.6 0.7 0.8 1"/>
+    <quality shadowsize="4096"/>
+    <global azimuth="140" elevation="-18"/>
+  </visual>
+
+  <asset>
+    <texture name="skybox" type="skybox" builtin="gradient" rgb1="0.45 0.6 0.85" rgb2="0.85 0.9 0.98" width="512" height="3072"/>
+    <texture type="2d" name="groundtex" builtin="checker" mark="edge" rgb1="0.32 0.40 0.46" rgb2="0.24 0.30 0.36" markrgb="0.7 0.75 0.8" width="512" height="512"/>
+    <material name="groundplane" texture="groundtex" texuniform="true" texrepeat="6 6" reflectance="0.15"/>
+    <texture name="blocktex" type="2d" file="asset/block.png"/>
+    <material name="stepmat" texture="blocktex" rgba="0.85 0.80 0.55 1"/>
+    <material name="pillarmat" rgba="0.75 0.35 0.30 1" reflectance="0.05"/>
+    <material name="wallmat" rgba="0.70 0.72 0.75 1"/>
+    <material name="goalmat" rgba="0.2 0.8 0.3 0.45"/>
+  </asset>
+
+  <worldbody>
+    <light pos="3 0 5" dir="-0.2 0 -1" directional="true" diffuse="0.7 0.7 0.7" specular="0.2 0.2 0.2"/>
+    <geom name="floor" size="0 0 0.05" type="plane" material="groundplane" condim="3" friction="1.4 0.3 0.1"/>
+
+    <!-- obstacles (perceived by the planner; names start with obs_) -->
+    <!-- low full-width steps: STEP OVER -->
+    <geom name="obs_step1" type="box" size="0.35 1.6 0.030" pos="2.5 0 0.030" material="stepmat" condim="3"/>
+    <geom name="obs_step2" type="box" size="0.35 1.6 0.035" pos="8.2 0 0.035" material="stepmat" condim="3"/>
+    <!-- tall pillars: GO AROUND (clear lanes to +/-2.0) -->
+    <geom name="obs_pillarA" type="cylinder" size="0.26 0.45" pos="4.3 0.0  0.45" material="pillarmat" condim="3"/>
+    <geom name="obs_pillarB" type="cylinder" size="0.26 0.45" pos="6.4 0.0  0.45" material="pillarmat" condim="3"/>
+
+    <!-- goal marker (non-colliding) -->
+    <geom name="goal_marker" type="cylinder" size="0.18 0.02" pos="10.5 0 0.02" material="goalmat" contype="0" conaffinity="0"/>
+
+    <!-- decorative boundary (well clear of the corridor) -->
+    <geom name="wall_left"  type="box" size="7.0 0.12 0.5" pos="5.5 3.0 0.5" material="wallmat" condim="3"/>
+    <geom name="wall_right" type="box" size="7.0 0.12 0.5" pos="5.5 -3.0 0.5" material="wallmat" condim="3"/>
+    <geom name="wall_back"  type="box" size="0.12 3.0 0.5" pos="-1.5 0 0.5" material="wallmat" condim="3"/>
+    <geom name="wall_front" type="box" size="0.12 3.0 0.5" pos="12.5 0 0.5" material="wallmat" condim="3"/>
+  </worldbody>
+</mujoco>
